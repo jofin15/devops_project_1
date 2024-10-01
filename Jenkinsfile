@@ -10,7 +10,7 @@ terraform init
 terraform plan
 terraform $TERRAFORM_ACTION -auto-approve
 
-if [ $TERRAFORM_ACTION = "destroy" ]; then
+if [ "$TERRAFORM_ACTION" = "destroy" ]; then
     exit 0
 else
     cd ../Ansible
