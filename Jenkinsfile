@@ -1,7 +1,7 @@
 #!/bin/bash
 set -xe
 
-cd devops-project/Terraform
+cd jofin-devops-project/Terraform
 
 sed -i "s/server_name/${SERVER_NAME}/g" backend.tf
 export TF_VAR_name=${SERVER_NAME}
