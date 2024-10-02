@@ -1,18 +1,17 @@
 data "aws_ami" "ubuntu" {
   most_recent = true
 
-  owners = ["099720109477"]  # Ubuntu account ID
+  owners = ["099720109477"]  # Ubuntu official account ID
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-20.04-amd64-server-*"]
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
   }
 
-  # Uncomment this filter if needed later
-  # filter {
-  #   name   = "virtualization-type"
-  #   values = ["hvm"]
-  # }
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
 }
 
 resource "aws_instance" "dev_machine" {
