@@ -7,15 +7,17 @@
   vars:
     ansible_ssh_private_key_file: "/etc/ansible/jomin-key-pair.pem"  
     ansible_ssh_user: "ubuntu"
+  
   tasks:
-    - name: "Install apache2 and php packages"
+    - name: "Install apache2, php, and unzip packages"
       apt:
         name:
           - "apache2"
           - "php"
+          - "unzip"  # Ensure unzip is installed for unarchive task
         state: present
         update_cache: yes
-        
+
     - name: "Copy code from GitHub"
       get_url:
         url: https://www.shubhammishra.in
@@ -26,25 +28,19 @@
         name: apache2
         state: started
 
-    - name: APT Install Packages
+    - name: "Install wget"
       apt: 
-        name: "{{ item }}"
+        name: wget
         state: latest
-      loop:
-        - wget
 
-    - name: Install unzip package
-      apt:
-        name: unzip
-        state: present
+    - name: "Download and unarchive Terraform"
+      unarchive:
+        src: https://releases.hashicorp.com/terraform/0.9.1/terraform_0.9.1_linux_amd64.zip
+        dest: /usr/bin
+        remote_src: true
+        mode: '0755'  # Ensuring correct permissions for the extracted binary
 
-    - name: Download Terraform binary
-      get_url:
-        url: https://releases.hashicorp.com/terraform/0.9.1/terraform_0.9.1_linux_amd64.zip
-        dest: /tmp/terraform_0.9.1_linux_amd64.zip
-
-    - name: Unzip Terraform binary
-      unzip:
-        src: /tmp/terraform_0.9.1_linux_amd64.zip
-        dest: /usr/local/bin/
-        remote_src: yes
+    - name: "Ensure Apache service is enabled on boot"
+      systemd:
+        name: apache2
+        enabled: yes
