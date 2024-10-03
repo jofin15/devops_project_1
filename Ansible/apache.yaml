@@ -25,16 +25,26 @@
       service:
         name: apache2
         state: started
-        
+
     - name: APT Install Packages
       apt: 
         name: "{{ item }}"
         state: latest
       loop:
         - wget
-        
-    - name: Terraform install
-      unarchive:
-        src: https://releases.hashicorp.com/terraform/0.9.1/terraform_0.9.1_linux_amd64.zip
-        dest: /usr/bin
-        remote_src: true
+
+    - name: Install unzip package
+      apt:
+        name: unzip
+        state: present
+
+    - name: Download Terraform binary
+      get_url:
+        url: https://releases.hashicorp.com/terraform/0.9.1/terraform_0.9.1_linux_amd64.zip
+        dest: /tmp/terraform_0.9.1_linux_amd64.zip
+
+    - name: Unzip Terraform binary
+      unzip:
+        src: /tmp/terraform_0.9.1_linux_amd64.zip
+        dest: /usr/local/bin/
+        remote_src: yes
