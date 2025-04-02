@@ -23,5 +23,5 @@ resource "aws_instance" "dev_machine" {
     Environment = "dev"
     Name        = "${var.name}-server"
   }
-  monitoring = true
+  ebs_optimized = true
 }
