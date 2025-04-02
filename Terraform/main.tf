@@ -23,4 +23,7 @@ resource "aws_instance" "dev_machine" {
     Environment = "dev"
     Name        = "${var.name}-server"
   }
+  metadata_options {
+    http_tokens = "required"
+  }
 }
